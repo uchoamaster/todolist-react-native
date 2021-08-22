@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {  SafeAreaView, StyleSheet, View, Text , TextInput } from 'react-native';
+import {  SafeAreaView, StyleSheet, View, Text , TextInput, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const COLORS = {primary: '#1f145c', white: '#fff', red: '#ff0000'};
 
@@ -17,7 +17,13 @@ const App = () => {
     <View style={styles.inputContainer}>
       <TextInput style={styles.input} placeholder="Digite sua tarefa aqui" />
     </View>
+    <TouchableOpacity>
+      <View  style={styles.IconContainer}>
+        <Icon name="add-task"  color={COLORS.white} style={styles.IconFooterContainer} />
+      </View>
+    </TouchableOpacity>
     </View>  
+
   </SafeAreaView>
     );
   };
@@ -56,6 +62,19 @@ const styles = StyleSheet.create({
     marginRight: 20,
     borderRadius: 30,
     paddingHorizontal: 20,
+  },
+  IconContainer: {
+    height: 50,
+    width: 50,
+    backgroundColor: COLORS.primary,
+    borderRadius: 25,
+    elevation: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+
+  },
+  IconFooterContainer: {
+    fontSize: 30,
   }
 
 });
