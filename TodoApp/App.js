@@ -34,7 +34,18 @@ const ListItem = ({todo}) => {
       textDecorationLine: todo?.completed ? 'line-through' : 'none',
     }}>{todo?.task}</Text>
     </View>
-    <TouchableOpacity style={[styles.actionIcon ]}></TouchableOpacity>
+   {/* se estiver completado então nao vai aparecer o check */}
+    {
+      !todo?.completed && (
+        <TouchableOpacity style={[styles.actionIcon ]}>
+        <Icon name="done-outline" size={20} color={COLORS.white} />
+      </TouchableOpacity>
+
+      )}
+
+    <TouchableOpacity style={[styles.actionIcon, {backgroundColor:'red'} ]}>
+      <Icon name="delete" size={20} color={COLORS.white} />
+    </TouchableOpacity>
   </View>;
 };
 
@@ -42,7 +53,7 @@ const ListItem = ({todo}) => {
   <SafeAreaView style={{flex: 1, backgroundColor: COLORS.white}}>
     <View style={styles.header}>
       <Text style={styles.headerText}>
-        TODOAPP
+        TAREFAS DIÁRIAS
       </Text>
       <Icon name="delete" style={styles.Icon}/>
     </View>
@@ -95,6 +106,10 @@ const styles = StyleSheet.create({
   color: COLORS.primary,
   fontWeight: 'bold',
   fontSize: 20,
+  textAlign: 'center',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flex: 1,
   },
   Icon: {
     color: COLORS.red,
