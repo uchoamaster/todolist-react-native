@@ -12,16 +12,18 @@ import {
 
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const COLORS = {primary: '#1f145c', white: '#fff', red: '#ff0000', gray: '#CCC',};
 
 const App = () => {
 const [ textInput, setTextInput ] = React.useState('') ;
-  const [todos, setTodos ] = React.useState([
-    
-    {id:1, task: 'Primeira tarefa da lista', completed: false},
-    {id:2, task: 'Segunda tarefa da lista', completed: true},
-
-]);
+const [todos, setTodos ] = React.useState([]);
+React.useEffect(() => {
+  getTodosFromUserDevice();
+},[]);
+React.useEffect(() => {
+  saveTodoTouserDevice(todos);
+}, [todos]);
 
 const ListItem = ({todo}) => {
   return <View style={styles.ListItem}>
@@ -41,11 +43,36 @@ const ListItem = ({todo}) => {
       </TouchableOpacity>
       )}
 
-    <TouchableOpacity style={[styles.actionIcon, {backgroundColor:'red'} ]}>
+    <TouchableOpacity style={[styles.actionIcon, {backgroundColor:'red'} ]}
+     onPress={() => deleteTodo(todo?.id)}>
       <Icon name="delete" size={20} color={COLORS.white} />
     </TouchableOpacity>
   </View>;
 };
+//criando o metodo de salvar com async storage para
+const saveTodoTouserDevice = async todos => {
+  try {
+    const stringifyTodos = JSON.stringify(todos);
+    await AsyncStorage.setItem('todos', stringifyTodos);
+  } catch (e) {
+    console.log(e);
+    //msg de erro caso nao conectar ou salvar nada
+  }
+};
+
+// criando agora o salvamento no storage
+const getTodosFromUserDevice = async () => {
+  try {
+    const todos = await AsyncStorage.getItem('todos');
+    if(todos !== null) {
+      setTodos(JSON.parse(todos));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 // add novas tarefas
 const addTodo = ()=> {
 if(textInput == ""){
@@ -72,13 +99,29 @@ const markTodoComplete = todoId =>{
   setTodos(newTodos);
 };
 
+// deletar uma lista de tarefas
+const deleteTodo = todoId => {
+const newTodos = todos.filter(item => item.id != todoId);
+setTodos(newTodos);
+}
+
+// apagar todos botão acima de todos da tela
+const clearTodos = () => {
+  Alert.alert("Confirma", "Apagar as tarefas listadas?", [{
+    text: "Sim",
+    onPress: () => setTodos([]),
+  }, 
+  {text: 'Não'},
+  ]);
+};
+
   return ( 
   <SafeAreaView style={{flex: 1, backgroundColor: COLORS.white}}>
     <View style={styles.header}>
       <Text style={styles.headerText}>
         TAREFAS DIÁRIAS
       </Text>
-      <Icon name="delete" style={styles.Icon}/>
+      <Icon name="delete-sweep" style={styles.Icon} onPress={clearTodos}/>
     </View>
     <FlatList
     showsVerticalScrollIndicator={false}
