@@ -13,7 +13,9 @@
     "@react-native-async-storage/async-storage": "^1.15.6",
     "react": "17.0.2",
     "react-native": "0.65.1",
-    "react-native-vector-icons": "^8.1.0"
+    "react-native-sweet-alert": "^3.5.0",
+    "react-native-vector-icons": "^8.1.0",
+    "sweetalert": "^2.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",

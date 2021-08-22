@@ -12,6 +12,8 @@ target 'TodoApp' do
     :hermes_enabled => false
   )
 
+  pod 'RNSweetAlert', :path => '../node_modules/react-native-sweet-alert'
+
   target 'TodoAppTests' do
     inherit! :complete
     # Pods for testing

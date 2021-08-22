@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {  
   SafeAreaView,
   StyleSheet,
@@ -8,18 +7,19 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-
+  Alert,
 } from 'react-native';
+
+
 import Icon from 'react-native-vector-icons/MaterialIcons';
-const COLORS = {primary: '#1f145c', white: '#fff', red: '#ff0000'};
+const COLORS = {primary: '#1f145c', white: '#fff', red: '#ff0000', gray: '#CCC',};
 
 const App = () => {
+const [ textInput, setTextInput ] = React.useState('') ;
   const [todos, setTodos ] = React.useState([
     
-    {id:1, task: 'Primeira tarefa da lista', completed: true},
+    {id:1, task: 'Primeira tarefa da lista', completed: false},
     {id:2, task: 'Segunda tarefa da lista', completed: true},
-    {id:3, task: 'Terceira tarefa da lista', completed: false},
-    {id:4, task: 'Quarta tarefa da lista', completed: true},
 
 ]);
 
@@ -35,18 +35,41 @@ const ListItem = ({todo}) => {
     }}>{todo?.task}</Text>
     </View>
    {/* se estiver completado então nao vai aparecer o check */}
-    {
-      !todo?.completed && (
-        <TouchableOpacity style={[styles.actionIcon ]}>
+    {!todo?.completed && (
+        <TouchableOpacity style={[styles.actionIcon ]} onPress={()=>markTodoComplete(todo?.id)}>
         <Icon name="done-outline" size={20} color={COLORS.white} />
       </TouchableOpacity>
-
       )}
 
     <TouchableOpacity style={[styles.actionIcon, {backgroundColor:'red'} ]}>
       <Icon name="delete" size={20} color={COLORS.white} />
     </TouchableOpacity>
   </View>;
+};
+// add novas tarefas
+const addTodo = ()=> {
+if(textInput == ""){
+  Alert.alert('Erro', 'Preencha o campo em branco!');
+}else {
+
+  const newTodo = {
+    id:Math.random(),
+    task: textInput,
+    completed: false,
+  };
+  setTodos([... todos, newTodo]);
+  setTextInput('');
+  }
+};
+// tarefas completadas
+const markTodoComplete = todoId =>{
+  const newTodos = todos.map((item)=>{
+    if(item.id == todoId){
+      return {... item, completed: true};
+    }
+    return item;
+  });
+  setTodos(newTodos);
 };
 
   return ( 
@@ -65,9 +88,11 @@ const ListItem = ({todo}) => {
      />
     <View style={styles.footer}>
     <View style={styles.inputContainer}>
-      <TextInput style={styles.input} placeholder="Digite sua tarefa aqui" />
+      <TextInput style={styles.input} placeholder="Digite sua tarefa aqui"
+      value={textInput}
+       onChangeText={(text)=>setTextInput(text)} />
     </View>
-    <TouchableOpacity>
+    <TouchableOpacity onPress={addTodo}>
       <View  style={styles.IconContainer}>
         <Icon name="add-task"  color={COLORS.white} style={styles.IconFooterContainer} />
       </View>
@@ -123,6 +148,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
+    backgroundColor: COLORS.gray,
   },
   inputContainer: {
     backgroundColor: COLORS.white,
