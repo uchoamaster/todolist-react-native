@@ -1,10 +1,43 @@
 import React from 'react';
 
-import {  SafeAreaView, StyleSheet, View, Text , TextInput, TouchableOpacity } from 'react-native';
+import {  
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const COLORS = {primary: '#1f145c', white: '#fff', red: '#ff0000'};
 
 const App = () => {
+  const [todos, setTodos ] = React.useState([
+    
+    {id:1, task: 'Primeira tarefa da lista', completed: true},
+    {id:2, task: 'Segunda tarefa da lista', completed: true},
+    {id:3, task: 'Terceira tarefa da lista', completed: false},
+    {id:4, task: 'Quarta tarefa da lista', completed: true},
+
+]);
+
+const ListItem = ({todo}) => {
+  return <View style={styles.ListItem}>
+    <View style={{flex: 1}}>
+      <Text 
+      style={{
+      fontWeight: 'bold',
+      fontSize: 16,
+      color: COLORS.primary,
+      textDecorationLine: todo?.completed ? 'line-through' : 'none',
+    }}>{todo?.task}</Text>
+    </View>
+    <TouchableOpacity style={[styles.actionIcon ]}></TouchableOpacity>
+  </View>;
+};
+
   return ( 
   <SafeAreaView style={{flex: 1, backgroundColor: COLORS.white}}>
     <View style={styles.header}>
@@ -13,6 +46,12 @@ const App = () => {
       </Text>
       <Icon name="delete" style={styles.Icon}/>
     </View>
+    <FlatList
+    showsVerticalScrollIndicator={false}
+    contentContainerStyle={{padding:20, paddingBottom: 100}}
+     data={todos} 
+     renderItem={({item}) => <ListItem todo={item} />}
+     />
     <View style={styles.footer}>
     <View style={styles.inputContainer}>
       <TextInput style={styles.input} placeholder="Digite sua tarefa aqui" />
@@ -29,6 +68,23 @@ const App = () => {
   };
 
 const styles = StyleSheet.create({
+  actionIcon: {
+    height: 25,
+    width: 25,
+    backgroundColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 5,
+    borderRadius: 3,
+  },
+  ListItem:{
+    padding: 20,
+    backgroundColor:COLORS.white,
+    flexDirection: 'row',
+    elevation: 12,
+    borderRadius: 7,
+    marginVertical: 10,
+  },
   header: {
     padding: 20,
     flexDirection: 'row',
@@ -75,7 +131,7 @@ const styles = StyleSheet.create({
   },
   IconFooterContainer: {
     fontSize: 30,
-  }
+  },
 
 });
 
